@@ -1,7 +1,7 @@
 from decimal import Decimal
 
-from WorldState import WorldState
-from controller.ControlObjective import ControlObjective
+from simulation.WorldState import WorldState
+from controller.objective.ControlObjective import ControlObjective
 
 
 class EnvelopeObjective(ControlObjective):
@@ -10,14 +10,18 @@ class EnvelopeObjective(ControlObjective):
         self.lower = lower
         self.upper = upper
 
-    def is_satisfied(self, world_state : WorldState):
+    def is_satisfied(self, world_state: WorldState):
         value = world_state.variables[self.variable]
         return self.lower < value < self.upper
 
-    def distance_until_satisfied(self, world_state : WorldState):
+    def distance_until_satisfied(self, world_state: WorldState):
+        if self.is_satisfied(world_state):
+            return 0
+
         value = world_state.variables[self.variable]
 
         if value < self.lower:
             return self.lower - value
         else:
             return self.upper - value
+

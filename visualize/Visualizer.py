@@ -6,21 +6,21 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly
-import plotly.express as px
 import pandas as pd
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
-from WorldState import WorldState
-from utils import wait_for_world_initialization
+
+from simulation import Simulation
+from simulation.utils import wait_for_world_initialization
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 class Visualizer:
-    def __init__(self, world_states: List[WorldState], lock: threading.Lock):
-        self.world_states = world_states
-        self.lock = lock
+    def __init__(self, simulation: Simulation):
+        self.world_states = simulation.world_states
+        self.lock = simulation.lock
 
-        wait_for_world_initialization(lock, world_states)
+        wait_for_world_initialization(self.lock, self.world_states)
 
         app = dash.Dash("Visualizer", external_stylesheets=external_stylesheets)
 

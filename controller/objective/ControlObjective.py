@@ -1,4 +1,4 @@
-from WorldState import WorldState
+from simulation.WorldState import WorldState
 
 
 class ControlObjective:
