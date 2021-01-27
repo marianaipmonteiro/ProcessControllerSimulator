@@ -1,26 +1,23 @@
-import threading
-import time
+from decimal import Decimal
 from typing import List, Dict
 
-from SimulatedSystem import SimulatedSystem
-from Simulation import RunningFlag
-from WorldState import WorldState
-from controller.ControlAction import ControlAction
-from controller.ControlObjective import ControlObjective
-from model.Model import Model
-from utils import wait_for_world_initialization
+from controller.action.ControlAction import ControlAction
+from controller.problem.ControlProblem import ControlProblem
+from simulation.SimulatedSystem import SimulatedSystem
+from controller.objective.ControlObjective import ControlObjective
+from simulation.WorldState import WorldState
 
 
 class Controller(SimulatedSystem):
-    def __init__(self, control_objectives: Dict[str, ControlObjective], model: Model):
-        super().__init__()
-        self.control_objectives = control_objectives
+    def __init__(self, control_problem: ControlProblem, fps: int = 5):
+        super().__init__(fps)
+        self.control_problem = control_problem
 
-    def run(self, controller_fps: int, world_states: List[WorldState], lock: threading.Lock, running: RunningFlag):
-        # Wait for world initialization
-        wait_for_world_initialization(lock, world_states)
+    def step(self, time_delta: Decimal):
+        actions = self.calculate_control_actions(time_delta, self.get_latest_world())
+        actions_dict = dict([(a.var, a.value) for a in actions])
+        self.apply_changes_to_latest_world(actions_dict)
 
-        threading.Thread(target=self.simulate_system, args=(controller_fps, world_states, lock, running)).start()
-
-    def step(self, time_delta, world_states):
-        pass
+    def calculate_control_actions(self, time_delta: Decimal, latest_world: WorldState) -> List[ControlAction]:
+        raise Exception(
+            "Controller " + str(self.__class__) + " does not implement calculate_control_actions() function")

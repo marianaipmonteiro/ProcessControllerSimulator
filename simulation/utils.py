@@ -4,7 +4,7 @@ import time
 from decimal import Decimal
 from typing import List
 
-from WorldState import WorldState
+from simulation.WorldState import WorldState
 
 
 def quadratic_eq(a: Decimal,b: Decimal, c: Decimal) -> (Decimal, Decimal):
@@ -15,9 +15,9 @@ def quadratic_eq(a: Decimal,b: Decimal, c: Decimal) -> (Decimal, Decimal):
     return sol1, sol2
 
 def wait_for_world_initialization(lock: threading.Lock, world_states: List[WorldState]):
-        while not True:
-            lock.acquire(True)
-            if len(world_states) != 0:
-                break
-            time.sleep(1)
-            lock.release()
+    while not True:
+        lock.acquire(True)
+        if len(world_states) != 0:
+            break
+        time.sleep(1)
+        lock.release()
