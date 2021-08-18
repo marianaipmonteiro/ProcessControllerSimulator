@@ -1,7 +1,9 @@
 from decimal import Decimal
-
+from collections import namedtuple
 from loading.SimulatedSystemLoader import load_system
 from simulation import Simulation
+
+Command = namedtuple("Command", ["cmd", "desc", "handler"])
 
 
 class Console:
@@ -10,36 +12,30 @@ class Console:
         self.world_states_lock = simulation.world_states_lock
         self.world_states = simulation.world_states
 
+        self.CMDS = [
+            Command("pw", "print world - prints the world state", self.print_world),
+            Command("pv", "perturb variable - pv <variable> +/-<value>", self.perturb),
+            Command("tov", "toggle optimization variable - TODO", self.toggle_optimisation_variable),
+            Command("ls", "load system - ls <path_to_system> <system_name> <key1=val1>...", self.load_system),
+            Command("rs", "remove system - rs <system_name>", self.remove_system),
+            Command("help", "prints *this* help message", self.print_help),
+            Command("exit", "exits the program", self.exit)
+        ]
+
     def trap(self):
+        self.print_help(None)
         while self.simulation.is_running():
-            user_input = input("Type command: ")
+            user_input = input(">")
             self.process_user_input(user_input.strip())
 
     def process_user_input(self, user_input):
-        if user_input == "exit":
-            self.simulation.stop()
-        elif user_input == "p":
-            self.print_world()
-        elif user_input.startswith("perturb"):
-            self.perturb(user_input)
-        elif user_input.startswith("tov"):
-            self.toggle_optimisation_variable(user_input)
-        elif user_input.startswith("load system"):
-            self.load_system(user_input)
-        elif user_input.startswith("remove system"):
-            self.remove_system(user_input)
-        else:
-            self.print_help()
+        for c in self.CMDS:
+            if user_input.startswith(c.cmd):
+                c.handler(user_input)
 
-    def print_world(self):
-        world_state = self.get_latest_world()
+    def print_world(self, user_input):
+        world_state = self._get_latest_world()
         print(world_state)
-
-    def get_latest_world(self):
-        self.world_states_lock.acquire()
-        world_state = self.world_states[-1]
-        self.world_states_lock.release()
-        return world_state
 
     def perturb(self, user_input):
         user_input_list = user_input.split()
@@ -61,21 +57,8 @@ class Console:
         self.world_states.append(perturbed_world_state)
         self.world_states_lock.release()
 
-    def print_help(self): #TODO: put commands in constants
-        help_msg = """
-        Commands:
-            p - Prints the state of the world.
-            perturb <var> <value> - Perturbs variable <var> by the decimal amount <value>, positive or negative.
-            help - Prints this message.
-            #todo
-            load system <path_to_system> <system_name> [initialization params of the form <key1=val1 key2=val2>]
-            remove system <system_name>
-            exit - Exits the program.
-        """
-        print(help_msg)
-
     def toggle_optimisation_variable(self, user_input):
-        #todo
+        # todo
         pass
 
     def load_system(self, user_input):
@@ -100,3 +83,17 @@ class Console:
         name = tokens[2]
 
         self.simulation.remove_system(name)
+
+    def print_help(self, user_input):  # TODO: put commands in constants
+        print("Commands: ")
+        for c in self.CMDS:
+            print("\t{} - {}".format(c.cmd, c.desc))
+
+    def exit(self, user_input):
+        self.simulation.stop()
+
+    def _get_latest_world(self):
+        self.world_states_lock.acquire()
+        world_state = self.world_states[-1]
+        self.world_states_lock.release()
+        return world_state
