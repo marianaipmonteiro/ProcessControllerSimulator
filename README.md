@@ -61,6 +61,8 @@ Visualization is achieved by periodically rendering the values of a variable in 
 - [x] Initial Examples
 - [x] Visualization
 - [x] Logging
+- [ ] Figure out why Data Visualizer takes so long
+- [ ] GUI for Simulation Customization
 - [ ] Reinforcement Learning Controller Framework
 - [ ] Surrogate Model Framework
 - [ ] Benchmarks
