@@ -1,40 +1,25 @@
 import logging
+import sys
 from datetime import datetime
 
-from decimal import Decimal
 from Console import Console
-from controller.MPCController import MPCController
-from controller.objective.AlwaysSatisfiedObjective import AlwaysSatisfiedObjective
-from controller.objective.EnvelopeObjective import EnvelopeObjective
-from controller.problem.MPCProblem import MPCProblem
-from simulation.Simulation import Simulation
-from examples.cstr.CSTRModel import CSTRModel
-from visualize.Visualizer import Visualizer
+from loading.SimulatedSystemLoader import load_simulation
+from visualize.WebVisualizer import WebVisualizer
 
 if __name__ == "__main__":
     date_str = datetime.now().strftime("%m-%d-%Y-%H-%M")
 
     format = "%(asctime)s %(levelname)s: %(message)s"
-    logging.basicConfig(filename=date_str + '-run.log', format=format, level=logging.INFO, datefmt="%H:%M:%S")
+    logging.basicConfig(filename=date_str + '-run.log', format=format, level=logging.DEBUG, datefmt="%H:%M:%S")
 
-    model = CSTRModel()
+    if len(sys.argv) != 2:
+        raise Exception("Args includes only path to simulation")
 
-    mpc_problem = MPCProblem(
-        control_objectives={"Cb": EnvelopeObjective("Cb", Decimal(0.0), Decimal(0.1)),
-                            "Tr": AlwaysSatisfiedObjective("Tr")},
-        constraints={},
-        weights={"Cb": 1.0, "Tr": 1.0},
-        active_flags={"Cb": True, "Tr": True},
-        prediction_horizon=5,
-        optimisation_horizon=5
-    )
-
-    controller = MPCController(mpc_problem, model)
-
-    simulation = Simulation(world_initializer=model, systems={"Physics Model": model, "Controller": controller})
+    path_to_sim = sys.argv[1]
+    simulation = load_simulation(path_to_sim)
     simulation.run()
 
-    vis = Visualizer(simulation)
+    vis = WebVisualizer(simulation)
     vis.start()
 
     console = Console(simulation)

@@ -13,7 +13,7 @@ class Model(SimulatedSystem):
         self.equations = equations
 
     def step(self, time_delta):
-        logging.info("Starting a model step")
+        logging.debug("Starting a model step")
         # Get the latest state
         world_state = self.get_latest_world()
 
@@ -26,10 +26,10 @@ class Model(SimulatedSystem):
         # Apply each equation, changing the world state
         updates = {}
         for equation in self.equations:
-            logging.info("Applying equation: %s", equation)
+            #logging.info("Applying equation: %s", equation)
             u = equation.apply(world_state, time_delta)
             updates.update(u)
 
         updated_world = world_state.apply_assignment(updates)
-        logging.info("New world state computed: %s", updated_world)
+        #logging.info("New world state computed: %s", updated_world)
         return updated_world

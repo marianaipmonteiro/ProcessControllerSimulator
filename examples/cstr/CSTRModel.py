@@ -20,12 +20,7 @@ class CSTRModel(SelfInitializingModel):
     """
 
     def __init__(self, fps: int = 5):
-        equations = [ReactionRate(),
-                     MassBalanceA(),
-                     MassBalanceB(),
-                     ReactionHeat(),
-                     HeatBalanceTc(),
-                     HeatBalanceTr()]
+
 
         R = 8.3144621
         k1_0 = 2.145 * 10 ** 10
@@ -74,6 +69,13 @@ class CSTRModel(SelfInitializingModel):
         #   "Tc": 0,  # K
         #   "hR": 0  # kJ kmol-1
         # },
+
+        equations = [ReactionRate(),
+                     MassBalanceA(),
+                     MassBalanceB(),
+                     ReactionHeat(),
+                     HeatBalanceTc(),
+                     HeatBalanceTr()]
 
         super().__init__(equations, constants, mvs, cvs, fps)
 

@@ -7,7 +7,7 @@ from typing import Dict, List
 class WorldState:
 
     def __init__(self, constants: Dict[str, Decimal], variables: Dict[str, Decimal], mvs: List[str], cvs: List[str]):
-        getcontext().prec = 12
+        getcontext().prec = 10 # TODO make configurable
         for key in constants.keys():
             constants[key] = Decimal(constants[key])
             setattr(self, key, constants[key])
@@ -53,3 +53,11 @@ class WorldState:
             vars_copy[key] = val
         copy = WorldState(self.constants, vars_copy, self.mvs, self.cvs)
         return copy
+
+    def apply_increments(self, increments: Dict[str, Decimal]):
+        vars_copy = deepcopy(self.variables)
+        for key, val in increments.items():
+            vars_copy[key] = self.variables[key] + val
+        copy = WorldState(self.constants, vars_copy, self.mvs, self.cvs)
+        return copy
+
