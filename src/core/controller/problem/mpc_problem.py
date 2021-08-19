@@ -12,7 +12,7 @@ class MPCProblem(ControlProblem):
 
     def __init__(self, control_objectives: Dict[str, ControlObjective], constraints: Dict[str, Constraint],
                  weights: Dict[str, float], active_flags: Dict[str, bool], prediction_horizon: float,
-                 optimisation_horizon: float):
+                 optimisation_horizon: float, real_time: bool=True):
         """
         Creates a new MPCProblem
         :param control_objectives: a dictionary, where key is a cv and value is a control objective for that cv
@@ -21,8 +21,9 @@ class MPCProblem(ControlProblem):
         :param active_flags: a dictionary, where key is a cv and value is a boolean specifying whether that cv should be considered in optimization
         :param prediction_horizon: The horizon up to which the controller predicts the evolution of the system
         :param optimisation_horizon:
+        :param real_time: Whether the controller should act in real-time, or stop the world during optimization
         """
-        super().__init__(control_objectives, constraints)
+        super().__init__(control_objectives, constraints, real_time)
         self.weights = weights
         self.prediction_horizon = prediction_horizon
         self.active_flags = active_flags
