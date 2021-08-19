@@ -13,8 +13,6 @@ These instructions will get you a copy of the project up and running on your loc
 This example will run a Continuous Stirred Tank Reactor (CSTR) model. A MPC Controller will aim to steer the manipulated variables in order to reach the control objectives (maximizing product yield). The example model is available [here](src/examples/models/cstr_model.py), the controller is defined [here](src/core/controller/mpc_controller.py).
 
 ```
-#Install Dependencies
-pip install  dash pandas scipy numpy
 
 #Clone the project
 git clone https://github.com/marianaipmonteiro/ProcessControllerSimulator
@@ -22,8 +20,17 @@ git clone https://github.com/marianaipmonteiro/ProcessControllerSimulator
 #Change into project directory
 cd ProcessControllerSimulator
 
-#Run Main, which will run our example
-python3 Main.py
+#Create a virtual environment
+python3 -m venv venv
+
+#Activate the virtual environment
+source ./venv/bin/activate
+
+#Install Dependencies
+pip install -r requirements.txt
+
+#Run Main, providing a simulation class as an argument
+python3 Main.py examples.simulations.cstr_control_simulation.CSTRControlSimulation
 ```
 
 ### Visualization
