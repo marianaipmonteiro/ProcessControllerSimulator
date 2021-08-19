@@ -44,10 +44,10 @@ class SimulatedSystem:
                 self.step(ms_per_update / 1000 / 60 * self.time_multiplier)
                 lag -= ms_per_update
 
-            time.sleep(ms_per_update / 1000 / 4)
+            time.sleep(float(ms_per_update / 1000 / 4))  # Sleep this thread for a period shorter than update period
 
     def stop_system(self):
-        self.running = False #TODO maybe need some sync
+        self.running = False  # TODO maybe need some sync
 
     def get_latest_world(self) -> WorldState:
         self.lock.acquire()

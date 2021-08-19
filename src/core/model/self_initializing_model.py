@@ -5,7 +5,7 @@ from typing import List, Dict
 from .equation.initializing_equation import InitializingEquation
 from src.core.simulation.world_initializer import WorldInitializer
 from src.core.simulation.world_state import WorldState
-from src.core.model.model import Model
+from.model import Model
 
 
 class SelfInitializingModel(Model, WorldInitializer):

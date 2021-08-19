@@ -56,7 +56,7 @@ class MPCController(Controller):
             returned = minimize(cost_function, np.array(initial_guess),
                                 args=(latest_world, self.model, self.mpc_problem),
                                 tol=0.1,
-                                options={"maxiter": 15}, callback=MinimizeStopper(1))  # todo specify constraints
+                                options={"maxiter": 15}, callback=MinimizeStopper(0.5))  # todo specify constraints
             logging.debug("Optimization result %s", returned)
             result = returned.x.astype(Decimal)
         except TookTooLong as e:
