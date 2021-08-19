@@ -7,9 +7,10 @@ import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
+from flask import Flask
 from plotly.subplots import make_subplots
 
-from src.core.simulation import simulation
+from src.core.simulation.simulation import Simulation
 
 EXTERNAL_STYLESHEETS = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 NUM_SAMPLES_TO_DRAW = 100
@@ -20,11 +21,11 @@ UPDATE_SPEED_SECONDS = 5
 
 
 class WebVisualizer:
-    def __init__(self, simulation: simulation):
-        self.world_states = simulation.world_states
-        self.lock = simulation.world_states_lock
+    def __init__(self, sim: Simulation, server: Flask):
+        self.world_states = sim.world_states
+        self.lock = sim.world_states_lock
 
-        app = dash.Dash("Visualizer")
+        app = dash.Dash("Visualizer", server=server, url_base_pathname="/visualize/",external_stylesheets=EXTERNAL_STYLESHEETS)
 
         app.layout = html.Div(children=[
             html.H1(children='Data Visualizer'),
@@ -51,6 +52,7 @@ class WebVisualizer:
 
             fig = make_subplots(rows=num_rows, cols=NUM_GRAPHS_PER_ROW,
                                 shared_xaxes=True, subplot_titles=subplot_titles, vertical_spacing=0.2)
+            fig.update_layout(showlegend=False)
 
             counter = 0
             for col_name in df.columns:
@@ -78,9 +80,3 @@ class WebVisualizer:
         df = pd.DataFrame(table)
         return df
 
-    def start(self):
-        threading.Thread(target=self.start_server, args=()).start()
-
-    def start_server(self):
-        print("======== Starting server!")
-        self.app.run_server(debug=False, dev_tools_silence_routes_logging=True, dev_tools_hot_reload=False)

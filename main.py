@@ -1,9 +1,10 @@
 import logging
 import os
 import sys
+import time
 from datetime import datetime
 
-from src import Console, load_simulation, WebVisualizer
+from src import Console, load_simulation, WebVisualizer, WebServer
 
 
 def setup_logs():
@@ -31,8 +32,11 @@ if __name__ == "__main__":
     simulation = load_simulation(path_to_sim)
     simulation.run()
 
-    vis = WebVisualizer(simulation)
-    vis.start()
+    server = WebServer()
+    vis = WebVisualizer(simulation, server.flask_app)
+    server.start()
+
+    time.sleep(2)
 
     console = Console(simulation)
     console.trap()  # Grab main thread, trapping user input
