@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Running the example
 
-This example will run a Continuous Stirred Tank Reactor (CSTR) model. A MPC Controller will aim to steer the manipulated variables in order to reach the control objectives (maximizing product yield). The example model is available [here](src/examples/models/cstr_model.py), the controller is defined [here](src/core/controller/mpc_controller.py).
+This example will run a Continuous Stirred Tank Reactor (CSTR) model. A MPC Controller will aim to steer the manipulated variables in order to reach the control objectives (maximizing product yield). The example model is available [here](examples/models/cstr_model.py), the controller is defined [here](src/core/controller/mpc_controller.py).
 
 ```
 

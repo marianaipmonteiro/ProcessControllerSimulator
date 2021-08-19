@@ -3,9 +3,7 @@ import os
 import sys
 from datetime import datetime
 
-from console import Console
-from simulated_system_loader import load_simulation
-from web import WebVisualizer
+from src import Console, load_simulation, WebVisualizer
 
 
 def setup_logs():
