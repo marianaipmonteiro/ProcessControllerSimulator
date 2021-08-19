@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Running the example
 
-This example will run a Continuous Stirred Tank Reactor (CSTR) model. A MPC Controller will aim to steer the manipulated variables in order to reach the control objectives (maximizing product yield). The example model is available [here](examples/cstr/CSTRModel.py), the controller is defined [here](controller/MPCController.py).
+This example will run a Continuous Stirred Tank Reactor (CSTR) model. A MPC Controller will aim to steer the manipulated variables in order to reach the control objectives (maximizing product yield). The example model is available [here](src/examples/models/cstr_model.py), the controller is defined [here](src/core/controller/mpc_controller.py).
 
 ```
 #Install Dependencies
@@ -47,11 +47,11 @@ Commands:
 
 ## Computational Model
 
-The main abstractions in the framework are that of a [WorldState](simulation/WorldState.py), which contains the current state of the world (constants and variables). A [Simulation](simulation/Simulation.py) owns a list of WorldStates, and will use a [WorldInitializer](simulation/WorldInitializer.py) to create the initial world, providing definitions for constants and variables. A Simulation is initialized by providing it with a number of [SimulatedSystems](simulation/SimulatedSystem.py). 
+The main abstractions in the framework are that of a [WorldState](src/core/simulation/world_state.py), which contains the current state of the world (constants and variables). A [Simulation](src/core/simulation/simulation.py) owns a list of WorldStates, and will use a [WorldInitializer](src/core/simulation/world_initializer.py) to create the initial world, providing definitions for constants and variables. A Simulation is initialized by providing it with a number of [SimulatedSystems](src/core/simulation/simulated_system.py). 
 
 Each SimulatedSystem is instantiated by the Simulation, and runs a simulation loop on a separate thread. This loop will periodically poll the WorldState list, obtaining the most recent WorldState, which is used by the SimulatedSystem to compute a new WorldState, and appending it to the WorldState list, thus progressing the state of the world. A simple lock is used to provide exclusive acess during accesses to the world state list, but users are abstracted from that.
 
-Both [Models](model/Model.py) and [Controllers](controller/Controller.py) are SimulatedSystems, with specific simulation loops. To create a model, users may extend either [Model.py](model/Model.py) or [SelfInitializingModel.py](model/SelfInitializingModel.py) (which is both a Model and a WorldInitializer). An example Controller is provided in the form of an [MPC Controller](controller/MPCController.py).
+Both [Models](src/core/model/model.py) and [Controllers](src/core/controller/controller.py) are SimulatedSystems, with specific simulation loops. To create a model, users may extend either [Model.py](src/core/model/model.py) or [SelfInitializingModel.py](src/core/model/self_initializing_model.py) (which is both a Model and a WorldInitializer). An example Controller is provided in the form of an [MPC Controller](src/core/controller/mpc_controller.py).
 
 Visualization is achieved by periodically rendering the values of a variable in all the WorldStates over time.
 
