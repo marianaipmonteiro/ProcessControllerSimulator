@@ -47,11 +47,11 @@ class Simulation:
 
     def __str__(self):
         res = "Simulation{\n"
-        res += "\tTime Multiplier -> {}\n".format(self.time_multiplier)
-        res += "\tWorldInitializer -> {}\n".format(self.world_initializer)
+        res += "\tTime Multiplier -> {},\n".format(self.time_multiplier)
+        res += "\tWorldInitializer -> {},\n".format(self.world_initializer)
         res += "\tSystems = {\n"
         for key in self.systems:
-            res += "\t\t" + key + " -> " + str(self.systems[key]) + ",\n"
+            res += "\t\t\"" + key + "\" -> " + str(self.systems[key]) + ",\n"
         res += "\t}\n"
         res += "}\n"
         return res

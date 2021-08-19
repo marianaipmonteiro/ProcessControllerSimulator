@@ -4,7 +4,8 @@ import sys
 import time
 from datetime import datetime
 
-from src import Console, load_simulation, WebVisualizer, WebServer
+from src import Console, load_simulation, WebServer
+from src.web.web_visualizer import WebVisualizer
 
 
 def setup_logs():
@@ -32,8 +33,7 @@ if __name__ == "__main__":
     simulation = load_simulation(path_to_sim)
     simulation.run()
 
-    server = WebServer()
-    vis = WebVisualizer(simulation, server.flask_app)
+    server = WebServer(simulation, debug=True)
     server.start()
 
     time.sleep(2)

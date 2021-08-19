@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Visualize {{viz_name}}{% endblock %}
+
+{% block content %}
+<h1>Visualize</h1>
+<div class="embed-responsive embed-responsive-21by9">
+    <iframe src="/{{viz_name}}_viz/" title="viz" class="embed-responsive-item" frameborder="0"
+    style="border:0" allowfullscreen></iframe>
+</div>
+{% endblock %}

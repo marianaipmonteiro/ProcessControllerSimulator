@@ -12,11 +12,8 @@ from plotly.subplots import make_subplots
 
 from src.core.simulation.simulation import Simulation
 
-EXTERNAL_STYLESHEETS = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 NUM_SAMPLES_TO_DRAW = 100
-
 NUM_GRAPHS_PER_ROW = 4
-
 UPDATE_SPEED_SECONDS = 5
 
 
@@ -25,10 +22,9 @@ class WebVisualizer:
         self.world_states = sim.world_states
         self.lock = sim.world_states_lock
 
-        app = dash.Dash("Visualizer", server=server, url_base_pathname="/visualize/",external_stylesheets=EXTERNAL_STYLESHEETS)
+        app = dash.Dash(__name__, server=server, url_base_pathname="/default_viz/")
 
         app.layout = html.Div(children=[
-            html.H1(children='Data Visualizer'),
             dcc.Graph(
                 id='output-graph'
             ),
@@ -79,4 +75,3 @@ class WebVisualizer:
             table.append(var_copy)
         df = pd.DataFrame(table)
         return df
-

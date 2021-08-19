@@ -1,2 +1,1 @@
-from .web_visualizer import WebVisualizer
-from .web_server import WebServer
+from src.web.web_server import WebServer

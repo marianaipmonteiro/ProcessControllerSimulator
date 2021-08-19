@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<h1>Home</h1>
+
+<h3>Active Simulations</h3>
+{%for n, s in simulations.items() %}
+<div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+  <div class="card-header">Running Simulation</div>
+  <div class="card-body">
+    <h4 class="card-title">{{n}}</h4>
+    <p class="card-text">{{s}}</p>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
